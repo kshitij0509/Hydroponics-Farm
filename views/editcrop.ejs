@@ -1,0 +1,61 @@
+<% layout("layouts/boilerplate") %>
+<div class="container mt-5">
+  <h1 class="mb-4">Edit Crop Details</h1>
+  
+  <form action="/farm/edit/<%= crop._id %>?_method=PUT" method="POST">
+    <!-- Crop Name -->
+    <div class="mb-3">
+      <label for="name" class="form-label">Crop Name</label>
+      <input 
+        type="text" 
+        class="form-control" 
+        id="name" 
+        name="name" 
+        value="<%= crop.name %>" 
+        required>
+    </div>
+
+    <!-- pH -->
+    <div class="mb-3">
+      <label for="ph" class="form-label">pH</label>
+      <input 
+        type="number" 
+        step="0.1" 
+        class="form-control" 
+        id="ph" 
+        name="ph" 
+        value="<%= crop.ph %>" 
+        required>
+    </div>
+
+    <!-- Temperature -->
+    <div class="mb-3">
+      <label for="temperature" class="form-label">Temperature (°C)</label>
+      <input 
+        type="number" 
+        step="0.1" 
+        class="form-control" 
+        id="temperature" 
+        name="temperature" 
+        value="<%= crop.temperature %>" 
+        required>
+    </div>
+
+    <!-- Electrical Conductivity (EC) -->
+    <div class="mb-3">
+      <label for="ec" class="form-label">Electrical Conductivity (EC)</label>
+      <input 
+        type="number" 
+        step="0.1" 
+        class="form-control" 
+        id="ec" 
+        name="ec" 
+        value="<%= crop.ec %>" 
+        required>
+    </div>
+
+    <!-- Buttons -->
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="/farm" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>

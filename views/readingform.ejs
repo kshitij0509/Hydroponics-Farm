@@ -1,0 +1,199 @@
+<% layout("layouts/boilerplate") %>
+
+    <title>Hydroponics Plant Growth Record</title>
+    <script>
+        function validateForm() {
+            const ph = parseFloat(document.getElementById('ph').value);
+            const ec = parseFloat(document.getElementById('ec').value);
+            const temperature = parseFloat(document.getElementById('temperature').value);
+            const datetime = document.getElementById('datetime').value;
+            const name = document.getElementById('name').value;
+            const batch_no = document.getElementById('batch_no').value;
+            
+            if (isNaN(ph) || isNaN(ec) || isNaN(temperature)) {
+                alert("Please enter valid numbers for pH, EC, and temperature.");
+                return false;
+            }
+
+            if (!datetime || !name || !batch_no) {
+                alert("Please fill in all required fields.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</head>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydroponics Plant Growth Record</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        h2 {
+            text-align: center;
+            color: #006400;
+            margin-top: 20px;
+        }
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        form div {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="datetime-local"],
+        input[type="file"] {
+            width: calc(100% - 10px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h2>Hydroponics Plant Growth Record</h2>
+    <form id="cropForm" action="/farm/save/cropreading" method="POST" onsubmit="return validateForm()">
+        <input type="hidden" id="cropid" name="cropid" value="<%= cropid %>">
+        <div>
+            <label for="name">Plant Name:</label>
+            <input type="text" id="name" name="name" value="<%=cropName %>" required>
+        </div>
+        <div>
+            <label for="batch_no">Batch Number:</label>
+            <input type="text" id="batch_no" name="batch_no" required>
+        </div>
+        <div>
+            <label for="datetime">Date & Time of Record:</label>
+            <input type="datetime-local" id="datetime" name="datetime" required>
+        </div>
+        <div>
+            <label for="ph">pH Value:</label>
+            <input type="text" id="ph" name="ph" required>
+        </div>
+        <div>
+            <label for="ec">Electrical Conductivity (EC):</label>
+            <input type="text" id="ec" name="ec" required>
+        </div>
+        <div>
+            <label for="temperature">Temperature (°C):</label>
+            <input type="text" id="temperature" name="temperature" required>
+        </div>
+        <div>
+            <label for="photo">Upload Plant Photo (optional):</label>
+            <input type="file" id="photo" name="photo">
+        </div>
+        <button type="submit">Save Record</button>
+    </form>
+</body>
+</html>
+<script>
+    // // Function to set the current local date and time in the datetime
+    document.addEventListener("DOMContentLoaded", function () {
+    const dateTimeInput = document.getElementById('datetime');
+    
+    // Get the current date and time
+    const now = new Date();
+
+    // Get the date components (year, month, day)
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Get month and ensure 2 digits
+    const day = String(now.getDate()).padStart(2, '0'); // Get day and ensure 2 digits
+
+    // Get the time components (24-hour format)
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0'); // Get minutes and ensure 2 digits
+
+    // Construct the formatted date and time string for datetime-local (24-hour format)
+    const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    
+    // Set the value of the input field to 24-hour format (datetime-local expects 24-hour)
+    dateTimeInput.value = formattedDateTime;
+});
+
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const temperatureInput = document.getElementById('temperature');
+    
+    // Check if geolocation is supported
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            
+            // Construct the API URL with the user's coordinates
+            const apiKey = '3466ccea418dd7adef8431c05d6c8042'; // Replace with your actual OpenWeatherMap API key
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+
+            // Fetch the weather data
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Check if the data has the expected structure
+                    if (data.main && data.main.temp) {
+                        const temperature = data.main.temp;
+                        temperatureInput.value = temperature; // Set the temperature in the input field
+                    } else {
+                        throw new Error('Invalid data structure');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching temperature:', error);
+                    temperatureInput.value = 'Unable to fetch temperature'; // Fallback message
+                });
+        }, function(error) {
+            console.error('Geolocation error:', error);
+            temperatureInput.value = 'Unable to fetch location'; // Fallback message
+        });
+    } else {
+        console.log("Geolocation is not supported by this browser.");
+        temperatureInput.value = 'Geolocation not supported'; // Fallback message
+    }
+});
+
+</script>
+
+
+
+
+

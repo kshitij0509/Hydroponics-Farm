@@ -1,0 +1,104 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="container my-5 p-4 bg-light rounded shadow">
+  <h1 class="mb-4 text-center text-primary">Crop List</h1>
+  
+  <!-- Crop List -->
+  <ul class="list-group">
+    <% crops.forEach(crop => { %>
+      <li class="list-group-item d-flex justify-content-between align-items-center mb-3 rounded shadow-sm border-0">
+        
+        <!-- Name link -->
+        <a href="/farm/<%= crop._id %>" class="fs-5 text-decoration-none text-dark fw-bold">
+          <i class="bi bi-seedling text-success me-2"></i> <%= crop.name %>
+        </a>
+        
+        <!-- Buttons Group -->
+        <div class="btn-group">
+          <a href="/farm/cropreading/<%= crop._id %>" class="btn btn-sm btn-outline-success me-2">
+            <i class="bi bi-plus-circle"></i> Add Reading
+          </a>
+          <a href="/farm/<%= crop._id %>" class="btn btn-sm btn-outline-info me-2">
+            <i class="bi bi-eye"></i> View Readings
+          </a>
+          <a href="/farm/edit/<%= crop._id %>" class="btn btn-sm btn-outline-warning me-2">
+            <i class="bi bi-pencil"></i> Edit
+          </a>
+          
+          <!-- Delete Form -->
+          <form action="/farm/delete/<%= crop._id %>?_method=DELETE" method="POST" style="display: inline;">
+            <button type="submit" class="btn btn-sm btn-outline-danger">
+              <i class="bi bi-trash"></i> Delete
+            </button>
+          </form>
+        </div>
+        
+      </li>
+    <% }) %>
+  </ul>
+</div>
+
+<!-- Custom Styling -->
+<style>
+  .container {
+    background-color: #f9fafb;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .list-group-item {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
+
+  .list-group-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .list-group-item a {
+    color: #007bff;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .list-group-item a:hover {
+    text-decoration: underline;
+  }
+
+  .btn-group a, .btn-group button {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .btn-outline-success:hover {
+    background-color: #28a745;
+    color: #ffffff;
+  }
+
+  .btn-outline-info:hover {
+    background-color: #17a2b8;
+    color: #ffffff;
+  }
+
+  .btn-outline-warning:hover {
+    background-color: #ffc107;
+    color: #ffffff;
+  }
+
+  .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: #ffffff;
+  }
+
+  i.bi {
+    font-size: 1.2rem;
+    vertical-align: middle;
+  }
+</style>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">

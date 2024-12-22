@@ -1,0 +1,68 @@
+<% layout("layouts/boilerplate") %>
+<div class="mb-3"><h1>Add New Crop</h1></div>
+ <form
+      action="/farm/cropadded"
+      method="POST"
+    >
+      <div class="mb-3">
+        <label class="form-label" for="name">Name</label>
+        <input
+          class="form-control"
+          type="text"
+          id="name"
+          name="crop[name]"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="ph">pH</label>
+        <input
+          class="form-control"
+          type="text"
+          id="ph"
+          name="crop[ph]"
+          required
+        />
+      </div>
+
+      <!-- <input type="file" name="image" id="" multiple /> -->
+      <!-- <div class="mb-3">
+        <label class="form-label" for="image">Image Url</label>
+        <input
+          class="form-control"
+          type="text"
+          id="image"
+          name="campground[image]"
+          required
+        />
+      </div> -->
+
+       <div class="mb-3">
+        <label class="form-label" for="ec">Ec</label>
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            id="ec"
+            step="0.1"
+            name="crop[ec]"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="temperature">Temperature</label>
+        <input
+          class="form-control"
+          type="text"
+          id="temperature"
+          name="crop[temperature]"
+          required
+        ></input>
+      </div>
+      <div class="mb-3">
+        <button type="submit" class="btn-success">submit</button>
+      </div>
+    </form> 
+
