@@ -116,7 +116,7 @@
     <tbody>
         <% reading.forEach(record => { %>
         <tr>
-            <td><%= record._id || 'No ID' %></td> <!-- Added fallback for ID -->
+            <!-- <td><%= record._id || 'No ID' %></td> Added fallback for ID -->
             <td><%= record.name || 'No Name' %></td> <!-- Added fallback for name -->
             <td><%= record.batch_no || 'No Batch' %></td> <!-- Added fallback for batch_no -->
             <td><%= record.datetime || 'No Date' %></td> <!-- Added fallback for datetime -->
