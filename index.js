@@ -16,7 +16,7 @@ app.use(cors({ origin: "http://localhost:8000", credentials: true }));
 app.use(cookieParser());
 
 mongoose
-  .connect("mongodb://localhost:27017/hydroponicSystem", {
+  .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
