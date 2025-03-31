@@ -6,7 +6,7 @@
   <!-- Crop List -->
   <ul class="list-group">
     <% crops.forEach(crop => { %>
-      <li class="list-group-item d-flex justify-content-between align-items-center mb-3 rounded shadow-sm border-0">
+      <li class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 rounded shadow-sm border-0">
         
         <!-- Name link -->
         <a href="/farm/<%= crop._id %>" class="fs-5 text-decoration-none text-dark fw-bold">
@@ -14,7 +14,7 @@
         </a>
         
         <!-- Buttons Group -->
-        <div class="btn-group">
+        <div class="btn-group flex-wrap mt-3 mt-md-0">
           <a href="/farm/cropreading/<%= crop._id %>" class="btn btn-sm btn-outline-success me-2">
             <i class="bi bi-plus-circle"></i> Add Reading
           </a>
@@ -26,7 +26,7 @@
           </a>
           
           <!-- Delete Form -->
-          <form action="/farm/delete/<%= crop._id %>?_method=DELETE" method="POST" style="display: inline;">
+          <form action="/farm/delete/<%= crop._id %>?_method=DELETE" method="POST" class="d-inline">
             <button type="submit" class="btn btn-sm btn-outline-danger">
               <i class="bi bi-trash"></i> Delete
             </button>
@@ -45,6 +45,7 @@
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 95%;
   }
 
   .list-group-item {
@@ -52,6 +53,14 @@
     padding: 20px;
     border-radius: 12px;
     transition: transform 0.2s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (min-width: 768px) {
+    .list-group-item {
+      flex-direction: row;
+    }
   }
 
   .list-group-item:hover {
@@ -69,8 +78,14 @@
     text-decoration: underline;
   }
 
+  .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
   .btn-group a, .btn-group button {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
   }
 
