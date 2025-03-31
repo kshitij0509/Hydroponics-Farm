@@ -42,6 +42,11 @@ app.use(methodOverride("_method"));
 
 app.use("/farm", route);
 app.use("/farm/auth", authRoutes);
+
+app.get("/", (req, res) => {
+  res.redirect("/farm");
+});
+
 app.listen(PORT, () => {
   console.log(
     `<><><><><><><><><>< ***********LIVE ON ${PORT}************* ><><><><><><><><><><>`
