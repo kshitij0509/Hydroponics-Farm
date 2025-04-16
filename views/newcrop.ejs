@@ -1,4 +1,72 @@
 <% layout("layouts/boilerplate") %>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card shadow-sm rounded-4">
+        <div class="card-body p-4">
+          <h2 class="mb-4 text-center">🌱 Add New Crop</h2>
+
+          <form action="/farm/cropadded" method="POST">
+            <div class="mb-3">
+              <label class="form-label" for="name">Name</label>
+              <input
+                class="form-control"
+                type="text"
+                id="name"
+                name="crop[name]"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="ph">pH</label>
+              <input
+                class="form-control"
+                type="text"
+                id="ph"
+                name="crop[ph]"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="ec">EC</label>
+              <input
+                type="text"
+                class="form-control"
+                id="ec"
+                name="crop[ec]"
+                step="0.1"
+                required
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="temperature">Temperature</label>
+              <input
+                class="form-control"
+                type="text"
+                id="temperature"
+                name="crop[temperature]"
+                required
+              />
+            </div>
+
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-success btn-lg rounded-3">
+                ✅ Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 
 <div class="mb-3"><h1>Add New Crop</h1></div>
  <form
       action="/farm/cropadded"
@@ -24,18 +92,6 @@
           required
         />
       </div>
-
-      <!-- <input type="file" name="image" id="" multiple /> -->
-      <!-- <div class="mb-3">
-        <label class="form-label" for="image">Image Url</label>
-        <input
-          class="form-control"
-          type="text"
-          id="image"
-          name="campground[image]"
-          required
-        />
-      </div> -->
 
        <div class="mb-3">
         <label class="form-label" for="ec">Ec</label>
@@ -64,5 +120,4 @@
       <div class="mb-3">
         <button type="submit" class="btn-success">submit</button>
       </div>
-    </form> 
-
+    </form>  -->
