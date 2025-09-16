@@ -2,11 +2,15 @@ const Crop = require("../models/crop");
 const Cropreading = require('../models/cropreading');
 exports.updatecrop = async (req, res) => {
   try {
+      // Convert active string to boolean
+      if (req.body.active) {
+        req.body.active = req.body.active === 'true';
+      }
       const crop = await Crop.findByIdAndUpdate(req.params.id,req.body,{ new: true, runValidators: true });
       if (!crop) {
           return res.status(404).send('Crop not found');
       }
-      res.redirect(`/farm/${crop._id}`);
+      res.redirect('/farm');
 
   } catch (err) {
       console.error(err);

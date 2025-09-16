@@ -1,24 +1,104 @@
-<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
-  <div class="container-fluid">
-    <!-- <a class="navbar-brand" href="/farm">Hydroponics Farm</a> -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg navbar-dark modern-navbar">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="/farm">
+      <i class="bi bi-droplet-half me-2"></i>Hydroponics Farm
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
+      <div class="navbar-search me-3">
+        <input type="text" id="navSearchCrop" class="form-control" placeholder="Search crops..." style="width: 180px;">
+      </div>
+      <div class="navbar-filter me-3">
+        <select id="navFilterStatus" class="form-select" style="width: 140px;">
+          <option value="all">All Crops</option>
+          <option value="active">Active Only</option>
+          <option value="inactive">Inactive Only</option>
+        </select>
+      </div>
+      <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <a class="nav-link active" href="/farm">Home</a>
+          <a class="nav-link" href="/farm">
+            <i class="bi bi-house me-1"></i>Dashboard
+          </a>
         </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
-        </li> -->
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
-        </li> -->
         <li class="nav-item">
-          <a class="nav-link" href="/farm/newcrop">Add Crops</a>
+          <a class="nav-link" href="/farm/newcrop">
+            <i class="bi bi-plus-circle me-1"></i>Add Crop
+          </a>
         </li>
       </ul>
     </div>
   </div>
 </nav>
+
+<style>
+.modern-navbar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+  padding: 15px 0;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 1030 !important;
+  width: 100% !important;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  color: white !important;
+}
+
+.nav-link {
+  color: rgba(255,255,255,0.9) !important;
+  font-weight: 500;
+  padding: 8px 16px !important;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  color: white !important;
+  background: rgba(255,255,255,0.1);
+  transform: translateY(-2px);
+}
+
+body {
+  padding-top: 80px !important;
+}
+
+.navbar-search .form-control,
+.navbar-filter .form-select {
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  height: 38px;
+}
+
+.navbar-search .form-control:focus,
+.navbar-filter .form-select:focus {
+  background: white;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
+  border-color: rgba(255,255,255,0.5);
+}
+
+.navbar-search .form-control::placeholder {
+  color: #666;
+}
+
+@media (max-width: 991px) {
+  .navbar-search,
+  .navbar-filter {
+    margin: 10px 0;
+  }
+  
+  .navbar-search .form-control,
+  .navbar-filter .form-select {
+    width: 100% !important;
+  }
+}
+</style>
