@@ -7,6 +7,7 @@ const route = require("./routes/route");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const authRoutes = require("./routes/authRoutes");
+const MQTTHandler = require("./mqtt/mqttHandler");
 
 const methodOverride = require("method-override");
 require("dotenv").config();
@@ -43,9 +44,13 @@ app.use(methodOverride("_method"));
 app.use("/farm", route);
 app.use("/farm/auth", authRoutes);
 
+
 app.get("/", (req, res) => {
   res.redirect("/farm");
 });
+
+// Initialize MQTT Handler
+const mqttHandler = new MQTTHandler();
 
 app.listen(PORT, () => {
   console.log(
