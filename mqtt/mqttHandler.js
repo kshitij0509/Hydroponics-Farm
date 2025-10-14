@@ -1,10 +1,11 @@
 const mqtt = require('mqtt');
 const CropReading = require('../models/cropreading');
 const Crop = require('../models/crop');
+const influxDB = require('../influxdb');
 
 class MQTTHandler {
   constructor() {
-    this.client = mqtt.connect('mqtt://192.168.1.11:1883');
+    this.client = mqtt.connect('mqtt://localhost:1883');
     this.setupEventHandlers();
   }
 
@@ -80,7 +81,18 @@ class MQTTHandler {
       });
       
       await reading.save();
-      console.log('✅ EC sensor data saved successfully:', { ec, temperature, cropId });
+      
+      // Save to InfluxDB
+      try {
+        await influxDB.writeSensorData(cropId, { ph: ph || crop.ph, ec, temperature: temperature || crop.temperature });
+        console.log('✅ Data saved to MongoDB and InfluxDB:', { ec, temperature, cropId });
+      } catch (influxError) {
+        console.log('⚠️ MongoDB saved, InfluxDB failed:', influxError.message);
+        if (influxError.statusCode === 401) {
+          console.log('🔑 InfluxDB authentication issue - check your token in .env');
+        }
+        console.log('✅ Data saved to MongoDB only:', { ec, temperature, cropId });
+      }
     } catch (error) {
       console.error('❌ Error saving sensor data:', error);
     }

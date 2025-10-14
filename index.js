@@ -17,10 +17,7 @@ app.use(cors({ origin: "http://localhost:8000", credentials: true }));
 app.use(cookieParser());
 
 mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGO_URI)
   .then(() => {
     console.log(
       ".............^^^^^^^^^^^^........connected to database.......................^^^^^^^"
@@ -43,6 +40,8 @@ app.use(methodOverride("_method"));
 
 app.use("/farm", route);
 app.use("/farm/auth", authRoutes);
+// app.use("/api/sensors", require("./routes/sensorRoutes"));
+// app.use("/api/influx", require("./routes/influxRoutes"));
 
 
 app.get("/", (req, res) => {
