@@ -80,14 +80,14 @@ class MQTTHandler {
         crop: cropId
       });
       
-      await reading.save();
+      // await reading.save();   to stop preventing the data saved in mongodb for now 
       
       // Save to InfluxDB
       try {
         await influxDB.writeSensorData(cropId, { ph: ph || crop.ph, ec, temperature: temperature || crop.temperature });
-        console.log('✅ Data saved to MongoDB and InfluxDB:', { ec, temperature, cropId });
+        console.log('✅ Data saved to InfluxDB:', { ec, temperature, cropId });
       } catch (influxError) {
-        console.log('⚠️ MongoDB saved, InfluxDB failed:', influxError.message);
+        console.log('⚠️  InfluxDB failed:', influxError.message);
         if (influxError.statusCode === 401) {
           console.log('🔑 InfluxDB authentication issue - check your token in .env');
         }
