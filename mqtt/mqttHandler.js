@@ -12,11 +12,11 @@ class MQTTHandler {
   setupEventHandlers() {
     this.client.on('connect', () => {
       console.log('✅ MQTT Connected to EMQX broker');
-      this.client.subscribe('sensors/ec', (err) => {
+      this.client.subscribe(['sensors/ec', 'sensors/temperature', 'sensors/dht/temperature', 'sensors/dht/humidity'], (err) => {
         if (err) {
-          console.error('❌ Failed to subscribe to sensors/ec:', err);
+          console.error('❌ Failed to subscribe to sensor topics:', err);
         } else {
-          console.log('✅ Successfully subscribed to sensors/ec topic');
+          console.log('✅ Successfully subscribed to sensor topics');
         }
       });
     });
@@ -32,6 +32,42 @@ class MQTTHandler {
           await this.saveSensorData(data);
         } catch (error) {
           console.error('❌ Error processing MQTT message:', error);
+        }
+      } else if (topic === 'sensors/temperature') {
+        try {
+          const tempValue = parseFloat(message.toString());
+          const data = {
+            temperature: tempValue,
+            crop_id: '68c93e6e8fbcffb93a2393d5' // Use your crop ID
+          };
+          console.log('📊 Parsed temperature data:', data);
+          await this.saveSensorData(data);
+        } catch (error) {
+          console.error('❌ Error processing temperature message:', error);
+        }
+      } else if (topic === 'sensors/dht/temperature') {
+        try {
+          const dhtTempValue = parseFloat(message.toString());
+          const data = {
+            dht_temperature: dhtTempValue,
+            crop_id: '68c93e6e8fbcffb93a2393d5' // Use your crop ID
+          };
+          console.log('📊 Parsed DHT temperature data:', data);
+          await this.saveSensorData(data);
+        } catch (error) {
+          console.error('❌ Error processing DHT temperature message:', error);
+        }
+      } else if (topic === 'sensors/dht/humidity') {
+        try {
+          const humidityValue = parseFloat(message.toString());
+          const data = {
+            humidity: humidityValue,
+            crop_id: '68c93e6e8fbcffb93a2393d5' // Use your crop ID
+          };
+          console.log('📊 Parsed DHT humidity data:', data);
+          await this.saveSensorData(data);
+        } catch (error) {
+          console.error('❌ Error processing DHT humidity message:', error);
         }
       }
     });
@@ -52,7 +88,7 @@ class MQTTHandler {
   async saveSensorData(data) {
     try {
       console.log('💾 Attempting to save sensor data:', data);
-      const { ec_value, temperature, ph, crop_id } = data;
+      const { ec_value, temperature, ph, crop_id, dht_temperature, humidity } = data;
       const ec = ec_value;
       const cropId = crop_id;
       
@@ -76,6 +112,8 @@ class MQTTHandler {
         ph: ph || crop.ph,
         ec: ec,
         temperature: temperature || crop.temperature,
+        dht_temperature: dht_temperature,
+        humidity: humidity,
         batch_no: `AUTO_${Date.now()}`,
         crop: cropId
       });
@@ -84,8 +122,14 @@ class MQTTHandler {
       
       // Save to InfluxDB
       try {
-        await influxDB.writeSensorData(cropId, { ph: ph || crop.ph, ec, temperature: temperature || crop.temperature });
-        console.log('✅ Data saved to InfluxDB:', { ec, temperature, cropId });
+        const sensorData = { ph: ph || crop.ph };
+        if (ec !== undefined) sensorData.ec = ec;
+        if (temperature !== undefined) sensorData.temperature = temperature;
+        if (dht_temperature !== undefined) sensorData.dht_temperature = dht_temperature;
+        if (humidity !== undefined) sensorData.humidity = humidity;
+        
+        await influxDB.writeSensorData(cropId, sensorData);
+        console.log('✅ Data saved to InfluxDB:', sensorData);
       } catch (influxError) {
         console.log('⚠️  InfluxDB failed:', influxError.message);
         if (influxError.statusCode === 401) {

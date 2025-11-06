@@ -20,14 +20,17 @@ class InfluxDBClient {
   }
 
   async writeSensorData(cropId, sensorData) {
-    const { ph, ec, temperature } = sensorData;
+    const { ph, ec, temperature, dht_temperature, humidity } = sensorData;
     
     const point = new Point('sensor_reading')
       .tag('crop_id', cropId)
-      .floatField('ph', ph || 0)
-      .floatField('ec', ec || 0)
-      .floatField('temperature', temperature || 0)
       .timestamp(new Date());
+    
+    if (ph !== undefined) point.floatField('ph', ph);
+    if (ec !== undefined) point.floatField('ec', ec);
+    if (temperature !== undefined) point.floatField('temperature', temperature);
+    if (dht_temperature !== undefined) point.floatField('dht_temperature', dht_temperature);
+    if (humidity !== undefined) point.floatField('humidity', humidity);
     
     this.writeApi.writePoint(point);
     await this.writeApi.flush();
@@ -56,6 +59,8 @@ class InfluxDBClient {
             ph: o.ph || 0,
             ec: o.ec || 0,
             temperature: o.temperature || 0,
+            dht_temperature: o.dht_temperature || 0,
+            humidity: o.humidity || 0,
             batch_no: 'INFLUX'
           });
         },

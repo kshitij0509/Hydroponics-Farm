@@ -6,6 +6,8 @@ const CropReadingSchema = new mongoose.Schema({
     ph: { type: Number, required: true },
     ec: { type: Number, required: true },
     temperature: { type: Number, required: true },
+    dht_temperature: { type: Number, required: false },
+    humidity: { type: Number, required: false },
     batch_no: { type: String, required: true },
     // photo_url: { type: String, required: false }, // URL of the image from Cloudinary
      crop: {type: mongoose.Schema.Types.ObjectId, ref:'Crop' }
