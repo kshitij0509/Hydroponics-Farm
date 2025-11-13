@@ -12,7 +12,7 @@ class MQTTHandler {
   setupEventHandlers() {
     this.client.on('connect', () => {
       console.log('✅ MQTT Connected to EMQX broker');
-      this.client.subscribe(['sensors/ec', 'sensors/temperature', 'sensors/dht/temperature', 'sensors/dht/humidity'], (err) => {
+      this.client.subscribe(['sensors/ec', 'sensors/temperature', 'sensors/dht/temperature', 'sensors/dht/humidity', 'sensors/ph'], (err) => {
         if (err) {
           console.error('❌ Failed to subscribe to sensor topics:', err);
         } else {
@@ -69,6 +69,14 @@ class MQTTHandler {
         } catch (error) {
           console.error('❌ Error processing DHT humidity message:', error);
         }
+      } else if (topic === 'sensors/ph') {
+        try {
+          const data = JSON.parse(message.toString());
+          console.log('📊 Parsed pH data:', data);
+          await this.saveSensorData(data);
+        } catch (error) {
+          console.error('❌ Error processing pH message:', error);
+        }
       }
     });
 
@@ -122,7 +130,13 @@ class MQTTHandler {
       
       // Save to InfluxDB
       try {
-        const sensorData = { ph: ph || crop.ph };
+        const sensorData = {};
+        
+        // Only add pH if explicitly provided by sensor
+        if (ph !== undefined && !isNaN(ph)) {
+          sensorData.ph = ph;
+        }
+        
         if (ec !== undefined) sensorData.ec = ec;
         if (temperature !== undefined) sensorData.temperature = temperature;
         if (dht_temperature !== undefined) sensorData.dht_temperature = dht_temperature;
