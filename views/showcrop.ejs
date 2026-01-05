@@ -102,7 +102,7 @@
     <div class="grafana-container">
       <iframe 
         id="grafanaFrame"
-        src="http://localhost:3000/d-solo/c315cbf9-00ce-4c8d-81b0-1503977250c3/hydroponics-dashboard?orgId=1&from=now-1h&to=now&panelId=1" 
+        src="http://192.168.1.200:3000/d-solo/c315cbf9-00ce-4c8d-81b0-1503977250c3/hydroponics-dashboard?orgId=1&from=now-1h&to=now&panelId=1" 
         width="100%" 
         height="400" 
         frameborder="0">
@@ -558,7 +558,7 @@ function toggleStatCard(card) {
 function updateTimeRange() {
   const timeRange = document.getElementById('timeRange').value;
   const iframe = document.getElementById('grafanaFrame');
-  const baseUrl = 'http://localhost:3000/d-solo/c315cbf9-00ce-4c8d-81b0-1503977250c3/hydroponics-dashboard?orgId=1&panelId=1';
+  const baseUrl = 'http://192.168.1.200:3000/d-solo/c315cbf9-00ce-4c8d-81b0-1503977250c3/hydroponics-dashboard?orgId=1&panelId=1';
   
   if (timeRange === 'custom') {
     document.getElementById('customRangeInputs').style.display = 'block';
@@ -580,7 +580,7 @@ function applyCustomRange() {
   }
   
   const iframe = document.getElementById('grafanaFrame');
-  const baseUrl = 'http://localhost:3000/d-solo/c315cbf9-00ce-4c8d-81b0-1503977250c3/hydroponics-dashboard?orgId=1&panelId=1';
+  const baseUrl = 'http://192.168.1.200:3000/d-solo/c315cbf9-00ce-4c8d-81b0-1503977250c3/hydroponics-dashboard?orgId=1&panelId=1';
   const fromTimestamp = new Date(fromDate).getTime();
   const toTimestamp = new Date(toDate).getTime();
   
