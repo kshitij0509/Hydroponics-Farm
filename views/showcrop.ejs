@@ -143,23 +143,27 @@
           <table class="table table-hover table-striped" id="readingsTable">
             <thead class="table-success sticky-top">
               <tr>
+                <th>S.No</th>
                 <th>Date & Time</th>
                 <th>Batch</th>
                 <th>pH</th>
                 <th>EC</th>
                 <th>Temp (°C)</th>
-                <th>Actions</th>
+                <th>Humidity (%)</th>
+                <!-- <th>Actions</th> -->
               </tr>
             </thead>
             <tbody>
-              <% reading.slice().reverse().forEach(record => { %>
+              <% reading.forEach((record, index) => { %>
                 <tr>
+                  <td><%= index + 1 %></td>
                   <td><%= new Date(record.datetime).toLocaleString() %></td>
                   <td><span class="badge bg-primary"><%= record.batch_no %></span></td>
                   <td><span class="ph-value"><%= record.ph %></span></td>
                   <td><span class="ec-value"><%= record.ec %></span></td>
-                  <td><span class="temp-value"><%= record.temperature %>°</span></td>
-                  <td>
+                  <td><span class="temp-value"><%= record.dht_temperature %>°</span></td>
+                  <td><span class="humidity-value"><%= record.humidity %>%</span></td>
+                  <!-- <td>
                     <div class="btn-group" role="group">
                       <a href="/farm/editreading/<%= record._id %>" class="btn btn-sm btn-warning">
                         <i class="bi bi-pencil"></i>
@@ -170,7 +174,7 @@
                         </button>
                       </form>
                     </div>
-                  </td>
+                  </td> -->
                 </tr>
               <% }) %>
             </tbody>
@@ -316,7 +320,7 @@
   background-color: rgba(0,0,0,0.02);
 }
 
-.ph-value, .ec-value, .temp-value {
+.ph-value, .ec-value, .temp-value, .humidity-value {
   font-weight: 600;
   padding: 4px 8px;
   border-radius: 4px;

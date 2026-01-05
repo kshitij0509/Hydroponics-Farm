@@ -39,10 +39,12 @@ class InfluxDBClient {
   async getLatestReadings(cropId, limit = 10) {
     const query = `
       from(bucket: "${this.bucket}")
-        |> range(start: -2m)
+        |> range(start: -24h)
         |> filter(fn: (r) => r._measurement == "sensor_reading")
         |> filter(fn: (r) => r.crop_id == "${cropId}")
+        |> aggregateWindow(every: 30s, fn: last, createEmpty: false)
         |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+        |> filter(fn: (r) => exists r.ph and exists r.ec and exists r.dht_temperature)
         |> sort(columns: ["_time"], desc: true)
         |> limit(n: ${limit})
     `;
@@ -56,11 +58,11 @@ class InfluxDBClient {
             _id: `influx_${Date.now()}_${Math.random()}`,
             datetime: o._time,
             name: 'InfluxDB Reading',
-            ph: o.ph || 0,
-            ec: o.ec || 0,
-            temperature: o.temperature || 0,
-            dht_temperature: o.dht_temperature || 0,
-            humidity: o.humidity || 0,
+            ph: o.ph,
+            ec: o.ec,
+            temperature: o.temperature,
+            dht_temperature: o.dht_temperature,
+            humidity: o.humidity,
             batch_no: 'INFLUX'
           });
         },
